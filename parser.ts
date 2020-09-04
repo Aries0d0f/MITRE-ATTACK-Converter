@@ -49,7 +49,17 @@ const processor = () => {
 
   typeList.map(type => {
     const write$Classify = fs.createWriteStream(`out/attack--${type}.json`);
-    write$Classify.write(JSON.stringify(classified[type].map(data => _(data).toPairs().sortBy(0).fromPairs().value()), undefined, 2), "utf8");
+    const dataToExport = classified[type].map(data => {
+      if (data.external_references) {
+        return {
+          ...data,
+          [`${type}-id`]: data.external_references[0].external_id
+        };
+      } else {
+        return data;
+      }
+    });
+    write$Classify.write(JSON.stringify(dataToExport.map(data => _(data).toPairs().sortBy(0).fromPairs().value()), undefined, 2), "utf8");
     write$Classify.end();
   })
 }
