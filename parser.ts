@@ -50,14 +50,26 @@ const processor = () => {
   typeList.map(type => {
     const write$Classify = fs.createWriteStream(`out/attack--${type}.json`);
     const dataToExport = classified[type].map(data => {
+      let _data = data;
       if (data.external_references) {
-        return {
-          ...data,
+        _data = {
+          ..._data,
           [`${type}-id`]: data.external_references[0].external_id
         };
-      } else {
-        return data;
       }
+
+      if (type === "attack-pattern") {
+        _data = {
+          ..._data,
+          tactics: data.kill_chain_phases.map(phase => {
+            const targetTactic = classified["x-mitre-tactic"].find(tactic => tactic.x_mitre_shortname === phase.phase_name);
+            if (targetTactic) return targetTactic.external_references[0].external_id;
+            else console.log(`!![Inde-Pattern]!! ${data.external_references[0].external_id}`);
+          })
+        }
+      }
+
+      return _data;
     });
     write$Classify.write(JSON.stringify(dataToExport.map(data => _(data).toPairs().sortBy(0).fromPairs().value()), undefined, 2), "utf8");
     write$Classify.end();
