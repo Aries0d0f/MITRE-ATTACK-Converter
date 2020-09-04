@@ -26,7 +26,7 @@ const processor = () => {
   const data: RAWAttAckData = _.cloneDeep(oldData);
 
   data.objects = data.objects.filter(rawData => (!rawData.revoked && !rawData.x_mitre_deprecated));
-  const write$RAW = fs.createWriteStream("attack.json");
+  const write$RAW = fs.createWriteStream("out/attack.json");
   write$RAW.write(JSON.stringify(data, undefined, 2), "utf8");
   write$RAW.end();
 
@@ -41,14 +41,14 @@ const processor = () => {
 
   const classified = _.groupBy(data.objects, "type");
   const oldClassified = _.groupBy(oldData.objects, "type");
-  const write$Classify = fs.createWriteStream("attack-classified.json");
+  const write$Classify = fs.createWriteStream("out/attack-classified.json");
   write$Classify.write(JSON.stringify(classified, undefined, 2), "utf8");
   write$Classify.end();
   const typeList = Object.keys(classified);
   typeList.map(type => console.log(`# ${type} :: ${oldClassified[type].length} -> ${classified[type].length}`));
 
   typeList.map(type => {
-    const write$Classify = fs.createWriteStream(`attack--${type}.json`);
+    const write$Classify = fs.createWriteStream(`out/attack--${type}.json`);
     write$Classify.write(JSON.stringify(classified[type].map(data => _(data).toPairs().sortBy(0).fromPairs().value()), undefined, 2), "utf8");
     write$Classify.end();
   })
