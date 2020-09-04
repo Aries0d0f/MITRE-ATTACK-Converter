@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as _ from "lodash";
 
-const read$ = fs.createReadStream("enterprise-attack.json");
+const read$ = fs.createReadStream("mitre/enterprise-attack/enterprise-attack.json");
 read$.setEncoding("utf8");
 
 interface RAWAttAckData {
