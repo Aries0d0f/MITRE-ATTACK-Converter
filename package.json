@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "update": "git submodule update --init --recursive",
-    "parse": "ts-node ./parser.ts",
+    "parse": "npm run parse:main && npm run parse:relation",
+    "parse:main": "ts-node ./parser.ts",
+    "parse:relation": "ts-node ./relation-parser.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
