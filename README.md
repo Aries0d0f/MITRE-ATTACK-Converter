@@ -4,16 +4,17 @@ This is a simple tool to generate and parse original `MITRE ATT&CK` json data in
 
 ## How to
 
-### Generate
-
-```sh
-npm run parse
-```
-
-Generated file will be placed under `out/`.
-
-### Initial / Update data source
+### Initialize / Update data source
 
 ```sh
 npm run update
 ```
+
+### Generate
+
+```sh
+npm install
+npm run parse
+```
+
+Generated file will be placed under `out/`.
